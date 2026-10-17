@@ -354,6 +354,16 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Free disk space (android)
+        if: startsWith(matrix.platform,'android')
+        run: |
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/.ghcup \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost \
+            /usr/local/lib/node_modules /usr/lib/jvm/*8* 2>/dev/null || true
+          sudo docker image prune -af || true
+          sudo swapoff -a || true
+          df -h /
+
       - name: Setup Android Signing
         id: signing
         if: startsWith(matrix.platform,'android')
