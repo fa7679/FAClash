@@ -63,8 +63,8 @@ class _BrandSplashGateState extends State<BrandSplashGate>
   }
 }
 
-/// 品牌原画铺屏。竖屏底部对齐——原画上缘是留白星空，裁掉无妨，
-/// 山脊线、文案与署名都在下缘必须保留；横屏居中——保住闪电与文案主体。
+/// 品牌原画铺屏。竖版（fa7679 原稿）底部对齐——上缘留白星空可裁，
+/// 山脊线、文案与署名都在下缘必须保留；横版（同语言重绘）居中铺满。
 class _BrandSplash extends StatelessWidget {
   const _BrandSplash({required this.fadeIn});
 
@@ -81,7 +81,9 @@ class _BrandSplash extends StatelessWidget {
       child: FadeTransition(
         opacity: fadeIn,
         child: Image.asset(
-          'assets/images/splash_art.jpg',
+          landscape
+              ? 'assets/images/splash_art_landscape.jpg'
+              : 'assets/images/splash_art.jpg',
           fit: BoxFit.cover,
           alignment: landscape ? Alignment.center : Alignment.bottomCenter,
           filterQuality: FilterQuality.high,
