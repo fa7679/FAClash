@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// 品牌启动门：原生启动屏之后的第一帧品牌画面。
-/// 渐变底 + 白色闪电 +「星火，也可以燎原」，淡入停留后淡出交给主页。
+/// 全屏品牌原画（星空闪电 · fa7679 作），淡入停留后淡出交给主页。
 class BrandSplashGate extends StatefulWidget {
   const BrandSplashGate({super.key, required this.child});
 
@@ -63,77 +63,28 @@ class _BrandSplashGateState extends State<BrandSplashGate>
   }
 }
 
+/// 品牌原画铺屏。竖屏底部对齐——原画上缘是留白星空，裁掉无妨，
+/// 山脊线、文案与署名都在下缘必须保留；横屏居中——保住闪电与文案主体。
 class _BrandSplash extends StatelessWidget {
   const _BrandSplash({required this.fadeIn});
 
   final Animation<double> fadeIn;
 
+  static const _fallback = Color(0xFF091152);
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    final wide = size.width > 700;
+    final landscape = size.width > size.height;
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF191C3A), Color(0xFF4331D8)],
-        ),
-      ),
-      child: SafeArea(
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Center(
-              child: FadeTransition(
-                opacity: fadeIn,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/images/brand_mark.png',
-                      width: wide ? 128.0 : 104.0,
-                      filterQuality: FilterQuality.high,
-                    ),
-                    const SizedBox(height: 30),
-                    SlideTransition(
-                      position: Tween(
-                        begin: const Offset(0, 0.16),
-                        end: Offset.zero,
-                      ).animate(fadeIn),
-                      child: Text(
-                        '星火，也可以燎原',
-                        style: TextStyle(
-                          fontSize: wide ? 21.0 : 18.5,
-                          fontWeight: FontWeight.w500,
-                          height: 1.4,
-                          letterSpacing: 3,
-                          color: Colors.white.withValues(alpha: 0.92),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 28,
-              child: FadeTransition(
-                opacity: fadeIn,
-                child: Text(
-                  'by fa7679',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 12.5,
-                    letterSpacing: 1.5,
-                    color: Colors.white.withValues(alpha: 0.45),
-                  ),
-                ),
-              ),
-            ),
-          ],
+      decoration: const BoxDecoration(color: _fallback),
+      child: FadeTransition(
+        opacity: fadeIn,
+        child: Image.asset(
+          'assets/images/splash_art.jpg',
+          fit: BoxFit.cover,
+          alignment: landscape ? Alignment.center : Alignment.bottomCenter,
+          filterQuality: FilterQuality.high,
         ),
       ),
     );
