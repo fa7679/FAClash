@@ -63,8 +63,8 @@ class _BrandSplashGateState extends State<BrandSplashGate>
   }
 }
 
-/// 品牌原画铺屏。竖版（fa7679 原稿）底部对齐——上缘留白星空可裁，
-/// 山脊线、文案与署名都在下缘必须保留；横版（同语言重绘）居中铺满。
+/// 品牌原画铺屏（横竖两版均为 fa7679 原稿）。竖版底部对齐——上缘留白星空可裁，
+/// 山脊线、文案与署名都在下缘必须保留；横版居中铺满。
 class _BrandSplash extends StatelessWidget {
   const _BrandSplash({required this.fadeIn});
 
