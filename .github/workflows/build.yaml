@@ -310,8 +310,9 @@ jobs:
         run: cargo test --manifest-path services/helper/Cargo.toml --features windows-service
 
   build:
-    # Releases publish where the release links point: the public repository.
-    if: github.repository == 'chen08209/FlClash' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    # Fork release build: the upstream checks above are skipped on private
+    # repositories, so run the build matrix straight off tag pushes here.
+    if: ${{ !cancelled() && github.repository == 'fa7679/FAClash' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v') }}
     needs: [ dart, plugins, go, android, rust, windows-helper-test ]
     runs-on: ${{ matrix.os }}
     strategy:
