@@ -52,7 +52,7 @@ class LinuxProtocolRegistrationPlan {
   String get desktopEntry => [
     '[Desktop Entry]',
     'Type=Application',
-    'Name=FlClash',
+    'Name=FAClash',
     'NoDisplay=true',
     'Exec=$exec',
     'MimeType=${mimeTypes.join(';')};',
