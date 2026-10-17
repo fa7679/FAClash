@@ -14,6 +14,7 @@ import 'package:fl_clash/plugins/app.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:fl_clash/state.dart';
 import 'package:fl_clash/widgets/focus.dart';
+import 'package:fl_clash/widgets/brand_splash.dart';
 import 'package:fl_clash/widgets/keyboard_inset_hold.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
@@ -218,7 +219,7 @@ class ApplicationState extends ConsumerState<Application> {
             fontFamily: themeProps.fontFamily,
             fontFamilyFallback: fontFamilyFallback,
           ).withAppShapes,
-          home: KeyboardInsetHold(child: child!),
+          home: KeyboardInsetHold(child: BrandSplashGate(child: child!)),
         );
       },
       child: const HomePage(),
