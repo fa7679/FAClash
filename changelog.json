@@ -2,6 +2,57 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.0.3",
+      "tag": "v0.0.3",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "507d798b",
+              "scope": "android",
+              "text": "Standalone install identity (com.fa7679.faclash) - no more version or signature conflicts with upstream FlClash"
+            },
+            {
+              "id": "de0cbe65",
+              "scope": "ui",
+              "text": "Frosted-glass floating navigation bar"
+            },
+            {
+              "id": "bedb40a7",
+              "scope": "ui",
+              "text": "Artwork splash covers the first-run disclaimer flow"
+            },
+            {
+              "id": "93772f51",
+              "scope": "ui",
+              "text": "Minimal native splash with a seamless handoff to the artwork"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.0.2",
+      "tag": "v0.0.2",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "507d798b",
+              "scope": "android",
+              "text": "Standalone install identity (com.fa7679.faclash)"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.9.0",
       "tag": "v0.9.0",
       "date": "2026-10-14",
