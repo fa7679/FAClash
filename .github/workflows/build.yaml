@@ -62,7 +62,10 @@ jobs:
           yq -i '.hooks.user_defines.setup.build_assets = false' pubspec.yaml
 
       - name: Verify changelog
-        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+        # Upstream's verify assumes a monotonically increasing version line;
+        # this fork renumbers below 0.9.0, so the scan range would always trip
+        # over upstream's own non-conventional commits.
+        if: github.repository == 'chen08209/FlClash' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/'))
         run: dart run tool/changelog.dart verify
 
       - name: Run tests
