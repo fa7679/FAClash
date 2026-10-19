@@ -195,7 +195,10 @@ class ApplicationState extends ConsumerState<Application> {
               isDesktop: system.isDesktop,
               onConnectivityChanged: _handleConnectivityChanged,
               terminateSignals: _terminateSignals,
-              child: RemoteFocusAdapter(enabled: system.isTV, child: child!),
+              child: RemoteFocusAdapter(
+                enabled: system.isTV,
+                child: BrandSplashGate(child: child!),
+              ),
             );
           },
           scrollBehavior: const BaseScrollBehavior(),
@@ -219,7 +222,7 @@ class ApplicationState extends ConsumerState<Application> {
             fontFamily: themeProps.fontFamily,
             fontFamilyFallback: fontFamilyFallback,
           ).withAppShapes,
-          home: KeyboardInsetHold(child: BrandSplashGate(child: child!)),
+          home: KeyboardInsetHold(child: child!),
         );
       },
       child: const HomePage(),
