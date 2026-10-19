@@ -168,9 +168,11 @@ class _Spring extends ChangeNotifier implements ValueListenable<double> {
 }
 
 // A soft, wide drop in the manner of iOS rather than a Material elevation.
-const double _glassBlur = 24;
-const double _glassAlphaLight = 0.68;
-const double _glassAlphaDark = 0.55;
+const double _glassBlur = 30;
+const double _glassAlphaLight = 0.62;
+const double _glassAlphaDark = 0.5;
+const double _sheenAlphaLight = 0.3;
+const double _sheenAlphaDark = 0.14;
 
 List<BoxShadow> _dockShadows(ColorScheme colorScheme) {
   final strength = colorScheme.brightness == Brightness.dark ? 3.0 : 1.0;
@@ -1067,7 +1069,33 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
       borderRadius: BorderRadius.circular(999),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
-        child: bar,
+        // A top-lit sheen keeps the glass readable even over a flat page
+        // background, where there would otherwise be nothing to blur.
+        child: Stack(
+          children: [
+            bar,
+            Positioned.fill(
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withValues(
+                          alpha: colorScheme.brightness == Brightness.dark
+                              ? _sheenAlphaDark
+                              : _sheenAlphaLight,
+                        ),
+                        Colors.white.withValues(alpha: 0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
     return AnimatedBuilder(

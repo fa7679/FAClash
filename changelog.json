@@ -2,6 +2,39 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.0.4",
+      "tag": "v0.0.4",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "de0cbe65",
+              "scope": "ui",
+              "text": "Frosted-glass floating navigation bar (blur + translucent surface)"
+            },
+            {
+              "id": "0b5f6a07",
+              "scope": "ui",
+              "text": "Glass sheen highlight and stronger translucency"
+            },
+            {
+              "id": "bedb40a7",
+              "scope": "ui",
+              "text": "Artwork splash covers the first-run disclaimer flow"
+            },
+            {
+              "id": "93772f51",
+              "scope": "ui",
+              "text": "Minimal native splash with seamless handoff"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.0.3",
       "tag": "v0.0.3",
       "date": "2026-10-19",
