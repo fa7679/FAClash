@@ -515,6 +515,8 @@ jobs:
         env:
           IS_STABLE: ${{ env.IS_STABLE }}
           TAG: ${{ github.ref_name }}
+          TELEGRAM_API_ID: not-used-on-fork
+          TELEGRAM_API_HASH: not-used-on-fork
         run: |
           target=()
           if [[ "$IS_STABLE" == 'true' ]]; then
