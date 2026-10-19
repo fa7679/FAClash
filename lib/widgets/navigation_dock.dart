@@ -168,6 +168,10 @@ class _Spring extends ChangeNotifier implements ValueListenable<double> {
 }
 
 // A soft, wide drop in the manner of iOS rather than a Material elevation.
+const double _glassBlur = 24;
+const double _glassAlphaLight = 0.68;
+const double _glassAlphaDark = 0.55;
+
 List<BoxShadow> _dockShadows(ColorScheme colorScheme) {
   final strength = colorScheme.brightness == Brightness.dark ? 3.0 : 1.0;
   return [
@@ -965,12 +969,25 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
         shape: AppShape.full,
         shadows: _dockShadows(colorScheme),
       ),
-      child: Material(
-        color: colorScheme.surfaceContainer,
-        shape: AppShape.full,
-        // Raw pointers rather than recognizers: a drag has nothing to win the
-        // arena from, and a tap waiting on one lifts the lens late.
-        child: Listener(
+      // Frosted-glass bar: blur the content scrolling behind the dock, then
+      // tint it with a translucent surface so the pill reads glassy.
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(999),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
+          child: Material(
+            color: colorScheme.surfaceContainer.withValues(
+              alpha: colorScheme.brightness == Brightness.dark
+                  ? _glassAlphaDark
+                  : _glassAlphaLight,
+            ),
+            shape: AppShape.full,
+            side: BorderSide(
+              color: colorScheme.onSurface.withValues(alpha: 0.06),
+            ),
+            // Raw pointers rather than recognizers: a drag has nothing to win the
+            // arena from, and a tap waiting on one lifts the lens late.
+            child: Listener(
           behavior: HitTestBehavior.opaque,
           onPointerDown: _handlePointerDown,
           onPointerMove: _handlePointerMove,
@@ -1047,6 +1064,8 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
             ),
           ),
         ),
+      ),
+      ),
       ),
     );
     return AnimatedBuilder(
