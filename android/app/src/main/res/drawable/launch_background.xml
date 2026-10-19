@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- FAClash 启动屏（Android 12 以下）：原稿同款渐变底 + 居中白色闪电 -->
+<!-- FAClash 启动屏（Android 12 以下）：仅原稿同款渐变底，内容交给 Flutter 层 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/splash_background"/>
-    <item
-            android:gravity="center"
-            android:width="96dp"
-            android:height="96dp"
-            android:drawable="@drawable/splash_bolt"/>
 </layer-list>

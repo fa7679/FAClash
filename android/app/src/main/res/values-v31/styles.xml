@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- FAClash 启动屏（Android 12+）：系统 SplashScreen API，图标取自适应前景白色闪电 -->
+<!-- FAClash 启动屏（Android 12+）：系统 SplashScreen API，图标置空，仅背景色（内容由 Flutter 层原画接管） -->
 <resources>
     <style name="LaunchTheme" parent="@android:style/Theme.Light.NoTitleBar">
         <item name="android:windowSplashScreenBackground">#091152</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_transparent</item>
         <item name="android:windowSplashScreenAnimationDuration">400</item>
     </style>
 </resources>
