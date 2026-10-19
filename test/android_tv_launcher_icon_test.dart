@@ -60,7 +60,7 @@ void main() {
     );
     expect(
       _androidAttribute(adaptiveIcon, 'background', 'drawable'),
-      '@color/ic_launcher_background',
+      '@drawable/ic_launcher_background',
     );
 
     final vector = File(
@@ -83,7 +83,7 @@ void main() {
     );
 
     // Conservative bounds of the current logo, including the curved caps.
-    const logoBounds = ui.Rect.fromLTRB(54, 33, 179, 206.5);
+    const logoBounds = ui.Rect.fromLTRB(153, 93, 367, 419);
     final transformedBounds = ui.Rect.fromLTRB(
       (logoBounds.left * scaleX + translateX) / viewportWidth * 108,
       (logoBounds.top * scaleY + translateY) / viewportHeight * 108,
