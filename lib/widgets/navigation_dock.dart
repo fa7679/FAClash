@@ -169,10 +169,10 @@ class _Spring extends ChangeNotifier implements ValueListenable<double> {
 
 // A soft, wide drop in the manner of iOS rather than a Material elevation.
 const double _glassBlur = 30;
-const double _glassAlphaLight = 0.62;
-const double _glassAlphaDark = 0.5;
-const double _sheenAlphaLight = 0.3;
-const double _sheenAlphaDark = 0.14;
+const double _glassAlphaLight = 0.4;
+const double _glassAlphaDark = 0.32;
+const double _sheenAlphaLight = 0.22;
+const double _sheenAlphaDark = 0.1;
 
 List<BoxShadow> _dockShadows(ColorScheme colorScheme) {
   final strength = colorScheme.brightness == Brightness.dark ? 3.0 : 1.0;

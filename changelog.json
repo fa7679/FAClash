@@ -2,6 +2,24 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.0.5",
+      "tag": "v0.0.5",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "fcf83b46",
+              "scope": "ui",
+              "text": "Clear see-through glass: stronger translucency so cards and labels show through the dock"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.0.4",
       "tag": "v0.0.4",
       "date": "2026-10-19",
