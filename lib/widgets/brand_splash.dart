@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 /// 品牌启动门：原生启动屏之后的第一帧品牌画面。
 /// 全屏品牌原画（星空闪电 · fa7679 作），淡入停留后淡出交给主页。
