@@ -966,28 +966,25 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
     );
     final bar = DecoratedBox(
       decoration: ShapeDecoration(
-        shape: AppShape.full,
+        shape: AppShape.full.copyWith(
+          side: BorderSide(
+            color: colorScheme.onSurface.withValues(alpha: 0.06),
+          ),
+        ),
         shadows: _dockShadows(colorScheme),
       ),
-      // Frosted-glass bar: blur the content scrolling behind the dock, then
-      // tint it with a translucent surface so the pill reads glassy.
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(999),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
-          child: Material(
-            color: colorScheme.surfaceContainer.withValues(
-              alpha: colorScheme.brightness == Brightness.dark
-                  ? _glassAlphaDark
-                  : _glassAlphaLight,
-            ),
-            shape: AppShape.full,
-            side: BorderSide(
-              color: colorScheme.onSurface.withValues(alpha: 0.06),
-            ),
-            // Raw pointers rather than recognizers: a drag has nothing to win the
-            // arena from, and a tap waiting on one lifts the lens late.
-            child: Listener(
+      // Frosted-glass bar: the translucent surface lets the blurred backdrop
+      // show through, and the blurred content is clipped to the pill shape.
+      child: Material(
+        color: colorScheme.surfaceContainer.withValues(
+          alpha: colorScheme.brightness == Brightness.dark
+              ? _glassAlphaDark
+              : _glassAlphaLight,
+        ),
+        shape: AppShape.full,
+        // Raw pointers rather than recognizers: a drag has nothing to win the
+        // arena from, and a tap waiting on one lifts the lens late.
+        child: Listener(
           behavior: HitTestBehavior.opaque,
           onPointerDown: _handlePointerDown,
           onPointerMove: _handlePointerMove,
@@ -1065,7 +1062,12 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
           ),
         ),
       ),
-      ),
+    );
+    final glassBar = ClipRRect(
+      borderRadius: BorderRadius.circular(999),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
+        child: bar,
       ),
     );
     return AnimatedBuilder(
@@ -1075,7 +1077,7 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
         pull: Offset(_stretch.value, 0),
         child: child,
       ),
-      child: bar,
+      child: glassBar,
     );
   }
 }
