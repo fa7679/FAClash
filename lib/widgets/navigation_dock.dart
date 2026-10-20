@@ -169,10 +169,11 @@ class _Spring extends ChangeNotifier implements ValueListenable<double> {
 
 // A soft, wide drop in the manner of iOS rather than a Material elevation.
 const double _glassBlur = 30;
-const double _glassAlphaLight = 0.4;
-const double _glassAlphaDark = 0.32;
-const double _sheenAlphaLight = 0.22;
-const double _sheenAlphaDark = 0.1;
+const double _glassAlphaLight = 0.3;
+const double _glassAlphaDark = 0.25;
+const double _sheenAlphaLight = 0.35;
+const double _sheenAlphaDark = 0.18;
+const double _edgeAlpha = 0.05;
 
 List<BoxShadow> _dockShadows(ColorScheme colorScheme) {
   final strength = colorScheme.brightness == Brightness.dark ? 3.0 : 1.0;
@@ -1088,6 +1089,22 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
                               : _sheenAlphaLight,
                         ),
                         Colors.white.withValues(alpha: 0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        colorScheme.onSurface.withValues(alpha: _edgeAlpha),
+                        colorScheme.onSurface.withValues(alpha: 0),
                       ],
                     ),
                   ),
