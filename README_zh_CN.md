@@ -14,7 +14,7 @@
 [![License](https://img.shields.io/github/license/fa7679/FAClash?style=flat-square)](LICENSE)
 [![Upstream](https://img.shields.io/badge/upstream-FlClash-26A5E4?style=flat-square)](https://github.com/chen08209/FlClash)
 
-[下载](#下载) · [更新日志](CHANGELOG.md) · [从源码构建](#从源码构建)
+[官网](https://fa7679.7679520.xyz) · [下载](#下载) · [更新日志](CHANGELOG.md) · [从源码构建](#从源码构建)
 
 </div>
 
@@ -107,6 +107,8 @@ dart setup.dart android   # 或 windows、macos、linux
 其余选项可以运行 `dart setup.dart --help` 查看，例如用 `--targets` 只构建部分安装包格式。
 
 ## 支持
+
+官网：<https://fa7679.7679520.xyz>（页面源码在 [`website/`](website/)）。
 
 Bug 与功能建议请提交到 [GitHub Issues](https://github.com/fa7679/FAClash/issues)。本仓库跟随
 [上游 FlClash](https://github.com/chen08209/FlClash) 更新，上游本身的问题建议到上游反馈。

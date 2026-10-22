@@ -14,7 +14,7 @@ A secondary development of [FlClash](https://github.com/chen08209/FlClash) maint
 [![License](https://img.shields.io/github/license/fa7679/FAClash?style=flat-square)](LICENSE)
 [![Upstream](https://img.shields.io/badge/upstream-FlClash-26A5E4?style=flat-square)](https://github.com/chen08209/FlClash)
 
-[Download](#download) · [Changelog](CHANGELOG.md) · [Build from source](#build-from-source)
+[Website](https://fa7679.7679520.xyz) · [Download](#download) · [Changelog](CHANGELOG.md) · [Build from source](#build-from-source)
 
 </div>
 
@@ -114,6 +114,8 @@ Packages land in `dist/`. The Go core and the Rust libraries are compiled as par
 Run `dart setup.dart --help` for the remaining options, such as `--targets` to build only some package formats.
 
 ## Support
+
+Website: <https://fa7679.7679520.xyz> (source in [`website/`](website/)).
 
 Bugs and feature requests go to [GitHub Issues](https://github.com/fa7679/FAClash/issues). This fork tracks
 [upstream FlClash](https://github.com/chen08209/FlClash) — questions about upstream itself are best asked there.
