@@ -2,6 +2,29 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.0.6",
+      "tag": "v0.0.6",
+      "date": "2026-10-22",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "b4da7fe6",
+              "scope": "ui",
+              "text": "Stronger glass sheen, bottom edge shade and clearer see-through for the navigation dock"
+            },
+            {
+              "id": "fa7679",
+              "scope": "about",
+              "text": "Official website link (fa7679.7679520.xyz) in the About page"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.0.5",
       "tag": "v0.0.5",
       "date": "2026-10-19",
