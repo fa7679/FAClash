@@ -1,0 +1,395 @@
+{
+  "schemaVersion": 2,
+  "versions": [
+    {
+      "version": "0.0.7",
+      "tag": "v0.0.7",
+      "date": "2026-10-25",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "fa7679",
+              "scope": "ui",
+              "text": "Tray, status bar and quick settings icons use the FAClash bolt instead of upstream's ring-and-slashes mark"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "fa7679",
+              "scope": "windows",
+              "text": "Installer launches FAClash.exe instead of the renamed-away FlClash.exe, so the post-install auto start no longer fails"
+            },
+            {
+              "id": "fa7679",
+              "scope": "ui",
+              "text": "Glass actually shows: the dock's shadow was clipped away and the tint stacked into a white slab, and the desktop window backdrop was never requested"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.0.6",
+      "tag": "v0.0.6",
+      "date": "2026-10-22",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "b4da7fe6",
+              "scope": "ui",
+              "text": "Stronger glass sheen, bottom edge shade and clearer see-through for the navigation dock"
+            },
+            {
+              "id": "fa7679",
+              "scope": "about",
+              "text": "Official website link (fa7679.7679520.xyz) in the About page"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.0.5",
+      "tag": "v0.0.5",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "fcf83b46",
+              "scope": "ui",
+              "text": "Clear see-through glass: stronger translucency so cards and labels show through the dock"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.0.4",
+      "tag": "v0.0.4",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "de0cbe65",
+              "scope": "ui",
+              "text": "Frosted-glass floating navigation bar (blur + translucent surface)"
+            },
+            {
+              "id": "0b5f6a07",
+              "scope": "ui",
+              "text": "Glass sheen highlight and stronger translucency"
+            },
+            {
+              "id": "bedb40a7",
+              "scope": "ui",
+              "text": "Artwork splash covers the first-run disclaimer flow"
+            },
+            {
+              "id": "93772f51",
+              "scope": "ui",
+              "text": "Minimal native splash with seamless handoff"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.0.3",
+      "tag": "v0.0.3",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "507d798b",
+              "scope": "android",
+              "text": "Standalone install identity (com.fa7679.faclash) - no more version or signature conflicts with upstream FlClash"
+            },
+            {
+              "id": "de0cbe65",
+              "scope": "ui",
+              "text": "Frosted-glass floating navigation bar"
+            },
+            {
+              "id": "bedb40a7",
+              "scope": "ui",
+              "text": "Artwork splash covers the first-run disclaimer flow"
+            },
+            {
+              "id": "93772f51",
+              "scope": "ui",
+              "text": "Minimal native splash with a seamless handoff to the artwork"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.0.2",
+      "tag": "v0.0.2",
+      "date": "2026-10-19",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "507d798b",
+              "scope": "android",
+              "text": "Standalone install identity (com.fa7679.faclash)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.9.0",
+      "tag": "v0.9.0",
+      "date": "2026-10-14",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "breaking",
+          "entries": [
+            {
+              "id": "491fae1",
+              "scope": "views",
+              "text": "DNS and NTP override toggles are removed; picked keys apply to every profile"
+            },
+            {
+              "id": "1677024",
+              "scope": "database",
+              "text": "Custom overwrites are removed; rebuild them as custom profiles"
+            }
+          ]
+        },
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "491fae1",
+              "scope": "views",
+              "text": "Per-key DNS, NTP, sniffer and TUN settings"
+            },
+            {
+              "id": "3abda78",
+              "scope": "profiles",
+              "text": "Custom profiles"
+            },
+            {
+              "id": "8c43053",
+              "scope": "ui",
+              "text": "Stacked sheets, context menus and a sort mode"
+            },
+            {
+              "id": "532ebf0",
+              "scope": "providers",
+              "text": "DNS, Hosts and ports apply without a restart"
+            },
+            {
+              "id": "d3fa225",
+              "scope": "android",
+              "text": "Launcher shortcuts and one-step on-demand access"
+            },
+            {
+              "id": "2fa2f7f",
+              "scope": "core",
+              "text": "Share link import and mrs rule sets"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "1677024",
+              "scope": "database",
+              "text": "Unreadable settings no longer block startup or restores"
+            },
+            {
+              "id": "94a25f4",
+              "scope": "desktop",
+              "text": "Windows and Linux desktop fixes"
+            },
+            {
+              "id": "d780cb8",
+              "scope": "core,helper",
+              "text": "The elevated Core only answers its owner"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.8.99",
+      "tag": "v0.8.99",
+      "date": "2026-10-03",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "e131675",
+              "scope": "editor",
+              "text": "Editor word wrap and snippets"
+            },
+            {
+              "id": "e62afb7",
+              "scope": "dashboard",
+              "text": "More dashboard cards"
+            },
+            {
+              "id": "8378c70",
+              "scope": "views",
+              "text": "Hide timed-out nodes and search every list"
+            },
+            {
+              "id": "841d603",
+              "scope": "ui",
+              "text": "Sidebar, floating dock and drag to go back"
+            },
+            {
+              "id": "ee6a497",
+              "scope": "ui",
+              "text": "New app glyphs, empty states and theme page"
+            },
+            {
+              "id": "46fb7fe",
+              "scope": "overwrite",
+              "text": "Invalid override warnings and rule presets"
+            },
+            {
+              "id": "a390a42",
+              "scope": "config",
+              "text": "DNS query log and per-key DNS/NTP overrides"
+            },
+            {
+              "id": "8068e68",
+              "scope": "core",
+              "text": "Proxied service checks and outbound IP risk"
+            },
+            {
+              "id": "1e97716",
+              "scope": "platform",
+              "text": "Tray hotkeys, node delays and a delay test"
+            }
+          ]
+        },
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "ff23f30",
+              "scope": "core",
+              "text": "A changed resource link is now used by the next sync and by auto update"
+            },
+            {
+              "id": "e55f6d1",
+              "scope": "core",
+              "text": "DNS lookups no longer fail on networks that report no DNS servers"
+            },
+            {
+              "id": "786a6ab",
+              "scope": "proxies",
+              "text": "Smaller icons in icon-only group headers"
+            },
+            {
+              "id": "1e9955d",
+              "scope": "core,android",
+              "text": "Push notifications reconnect in Doze"
+            },
+            {
+              "id": "bee8f24",
+              "scope": "backup,database",
+              "text": "Restores never apply halfway"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.8.98",
+      "tag": "v0.8.98",
+      "date": "2026-09-14",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "c5bf5bd",
+              "scope": "resources",
+              "text": "Refresh the geo file size and time after an update finishes"
+            },
+            {
+              "id": "60f371a",
+              "scope": "core",
+              "text": "Keep the core running while Windows sleeps with the app suspended"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "0.8.97",
+      "tag": "v0.8.97",
+      "date": "2026-09-10",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "26cfbaf",
+              "scope": "ui",
+              "text": "Rework the app UI and refresh the localization"
+            },
+            {
+              "id": "aaf934c",
+              "scope": "app",
+              "text": "Rework the app layer and window handling, and add proxy authentication"
+            },
+            {
+              "id": "c0fcbc0",
+              "scope": "desktop",
+              "text": "Rework the desktop runners, packaging, and native build"
+            },
+            {
+              "id": "ae29f38",
+              "scope": "android",
+              "text": "Rework the Android VPN service and lifecycle handling"
+            },
+            {
+              "id": "adf715f",
+              "scope": "plugins",
+              "text": "Rework the desktop plugins and add the Helper service and Rust bridge"
+            },
+            {
+              "id": "c6eaa0a",
+              "scope": "core",
+              "text": "Rework the core IPC and process lifecycle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

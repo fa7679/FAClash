@@ -391,6 +391,39 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
 .foot__brand p{color:var(--ink-2);font-size:14px;line-height:1.75;max-width:34ch;margin-top:12px}
 .foot__end{margin-top:52px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:24px;font-size:12.5px;color:var(--ink-3)}
 
+/* ---------- 发布徽章 ---------- */
+.rel{
+  display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;margin-bottom:18px;
+  border:1px solid var(--line-2);border-radius:999px;background:var(--panel);
+  font-size:13px;color:var(--ink-2);
+  transition:border-color .18s ease,background .18s ease,color .18s ease,transform .1s ease;
+}
+.rel:hover{border-color:var(--indigo);color:var(--ink);background:var(--hover-bg)}
+.rel:active{transform:scale(.98)}
+.rel .rel__tag{font-family:var(--mono);font-weight:600;color:var(--indigo)}
+.rel .rel__arrow{display:inline-block;transition:transform .18s ease}
+.rel:hover .rel__arrow{transform:translateX(3px)}
+.rel .rel__dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex:0 0 auto}
+.rel[hidden]{display:none}
+
+/* ---------- 更新日志 ---------- */
+.clog{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.clog__ver{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:34px 0;border-bottom:1px solid var(--line)}
+.clog__v{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.clog__date{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:6px}
+.clog__gh{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--indigo)}
+.clog__list{display:flex;flex-direction:column;gap:9px}
+.clog__item{display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--ink-2);line-height:1.65}
+.clog__tag{
+  flex:0 0 auto;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:999px;
+  background:var(--indigo-soft);color:var(--indigo);
+}
+.clog__tag--fix{background:rgba(230,174,92,.14);color:var(--amber)}
+.clog__tag--perf{background:rgba(79,209,160,.13);color:var(--green)}
+.clog__tag--other{background:var(--panel-2);color:var(--ink-3)}
+.clog__more{padding:24px 0 0;font-size:14px;color:var(--ink-2)}
+.clog__more a{color:var(--indigo);border-bottom:1px solid rgba(155,155,240,.32)}
+
 /* ---------- 移动端 ---------- */
 @media (max-width:900px){
   .wrap,.headline,.win,.winWrap{width:calc(100% - 36px)}
@@ -476,6 +509,7 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
       <a href="#routing">分流</a>
       <a href="#live">实时</a>
       <a href="#platforms">下载</a>
+      <a href="#changelog">更新日志</a>
       <a href="#import">导入配置</a>
     </nav>
     <button class="nav__theme" id="themeToggle" type="button" aria-label="切换到深色模式" aria-pressed="false">
@@ -498,7 +532,13 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
     <div class="stage__pin" id="pin">
       <div class="headline">
         <div>
-          <h1>FAClash</h1>
+          <a class="rel" id="relBadge" href="#changelog" hidden>
+          <span class="rel__dot" aria-hidden="true"></span>
+          <span class="rel__tag" id="relVer">v0.0.0</span>
+          <span>已发布 · 查看更新</span>
+          <span class="rel__arrow" aria-hidden="true">→</span>
+        </a>
+        <h1>FAClash</h1>
           <p>基于 <b>mihomo</b>（ClashMeta）的多平台代理客户端。<br class="br-desk">规则分流、实时连接、订阅覆写，<span style="white-space:nowrap">一个应用走遍四个平台</span>。</p>
         </div>
       </div>
@@ -838,11 +878,23 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
   </section>
 
   <!-- ======== 导入 ======== -->
+  <!-- ======== 更新日志 ======== -->
+  <section class="sec sec--white" id="changelog">
+    <div class="wrap">
+      <div class="sec__head">
+        <h2>更新日志</h2>
+        <p>本页随 GitHub 发布自动同步，不用盯着 Release 页刷——应用内同样会在新版本出现时提醒你。</p>
+      </div>
+      <div class="clog" id="clog"></div>
+      <p class="clog__more">完整历史与各版本下载见 <a href="https://github.com/fa7679/FAClash/releases" target="_blank" rel="noopener">GitHub Releases ↗</a></p>
+    </div>
+  </section>
+
   <section class="sec" id="import">
     <div class="wrap">
       <div class="sec__head">
         <h2>订阅链接点一下，配置就进去了</h2>
-        <p>机场给的 <code class="mono">clash://</code> 链接直接能用，<code class="mono">clashmeta://</code>、<code class="mono">faclash://</code> 和 <code class="mono">flclash://</code> 开头的同样会唤起 FAClash。</p>
+        <p>机场给的 <code class="mono">clash://</code> 链接直接能用，<code class="mono">clashmeta://</code> 和 <code class="mono">flclash://</code> 开头的同样会唤起 FAClash。</p>
       </div>
 
       <div class="conf">
@@ -923,8 +975,8 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
         </div>
       </div>
       <div class="foot__end">
-        <span>FAClash · 基于 mihomo 内核 · GPL-3.0</span>
-        <span>客户端不收集任何使用数据，配置与日志只存在你自己的设备上。</span>
+        <span>FAClash <b class="mono" id="footVer"></b>· 基于 mihomo 内核 · GPL-3.0</span>
+        <span>本站随 GitHub 发布自动更新 · 客户端不收集任何数据，配置与日志只存在你自己的设备上。</span>
       </div>
     </div>
   </footer>
@@ -1046,6 +1098,56 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
       if (!saved) apply(ev.matches);
     });
   }
+
+  /* ---------- 更新日志：随发布自动同步 ---------- */
+  const TYPE_ZH = { feat: '新功能', fix: '修复', perf: '优化', refactor: '重构', docs: '文档', chore: '维护' };
+  const escHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function renderChangelog(data) {
+    const versions = (data && data.versions) || [];
+    if (!versions.length) return;
+    const latest = versions[0];
+    const relVer = document.getElementById('relVer');
+    if (relVer) relVer.textContent = 'v' + latest.version;
+    const badge = document.getElementById('relBadge');
+    if (badge) badge.hidden = false;
+    const fv = document.getElementById('footVer');
+    if (fv) fv.textContent = 'v' + latest.version + ' · ' + latest.date + ' · ';
+    const box = document.getElementById('clog');
+    if (!box) return;
+    box.innerHTML = versions.slice(0, 5).map((v) => {
+      const items = v.groups.map((g) => {
+        const zh = TYPE_ZH[g.type] || '变更';
+        const cls = g.type === 'fix' ? ' clog__tag--fix'
+          : g.type === 'perf' ? ' clog__tag--perf'
+          : (TYPE_ZH[g.type] ? '' : ' clog__tag--other');
+        return g.entries.map((e) =>
+          '<div class="clog__item"><span class="clog__tag' + cls + '">' + zh + '</span><span>' + escHtml(e.text) + '</span></div>'
+        ).join('');
+      }).join('');
+      const pre = v.prerelease ? ' · pre' : '';
+      return '<div class="clog__ver">' +
+        '<div><div class="clog__v">v' + escHtml(v.version) + pre + '</div>' +
+        '<div class="clog__date">' + escHtml(v.date) + '</div>' +
+        '<a class="clog__gh" href="https://github.com/fa7679/FAClash/releases/tag/' + escHtml(v.tag) + '" target="_blank" rel="noopener">Release ↗</a></div>' +
+        '<div class="clog__list">' + items + '</div></div>';
+    }).join('');
+  }
+
+  (async () => {
+    let data = null;
+    try {
+      const r = await fetch('https://cdn.jsdelivr.net/gh/fa7679/FAClash@main/changelog.json', { cache: 'no-store' });
+      if (r.ok) data = await r.json();
+    } catch (e) {}
+    if (!data) {
+      try {
+        const r = await fetch('changelog.json');
+        if (r.ok) data = await r.json();
+      } catch (e) {}
+    }
+    renderChangelog(data);
+  })();
 
   /* ---------- 导航底色 ---------- */
   const nav = document.getElementById('nav');
