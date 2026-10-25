@@ -8,6 +8,16 @@
       "prerelease": false,
       "groups": [
         {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "fa7679",
+              "scope": "ui",
+              "text": "Tray, status bar and quick settings icons use the FAClash bolt instead of upstream's ring-and-slashes mark"
+            }
+          ]
+        },
+        {
           "type": "fix",
           "entries": [
             {
