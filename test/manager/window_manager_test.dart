@@ -252,12 +252,12 @@ void main() {
   group('sidebar blur', () {
     setUp(() => feature = const Feature(sidebarBlur: true));
 
-    tearDown(() => feature = const Feature());
+    tearDown(() => feature = const Feature(sidebarBlur: false));
 
     testWidgets('a disabled feature drops the backdrop despite the setting', (
       tester,
     ) async {
-      feature = const Feature();
+      feature = const Feature(sidebarBlur: false);
       await pumpWindowManager(tester);
       await tester.pumpAndSettle();
 

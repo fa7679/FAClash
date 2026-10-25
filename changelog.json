@@ -2,6 +2,29 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.0.7",
+      "tag": "v0.0.7",
+      "date": "2026-10-25",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "fix",
+          "entries": [
+            {
+              "id": "fa7679",
+              "scope": "windows",
+              "text": "Installer launches FAClash.exe instead of the renamed-away FlClash.exe, so the post-install auto start no longer fails"
+            },
+            {
+              "id": "fa7679",
+              "scope": "ui",
+              "text": "Glass actually shows: the dock's shadow was clipped away and the tint stacked into a white slab, and the desktop window backdrop was never requested"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.0.6",
       "tag": "v0.0.6",
       "date": "2026-10-22",

@@ -100,6 +100,8 @@ void main() {
 
   group('sidebar blur', () {
     testWidgets('stays hidden while the feature is off', (tester) async {
+      feature = const Feature(sidebarBlur: false);
+      addTearDown(() => feature = const Feature());
       await pumpThemeView(tester);
 
       expect(find.text('Sidebar blur'), findsNothing);

@@ -168,11 +168,17 @@ class _Spring extends ChangeNotifier implements ValueListenable<double> {
 }
 
 // A soft, wide drop in the manner of iOS rather than a Material elevation.
-const double _glassBlur = 30;
-const double _glassAlphaLight = 0.3;
-const double _glassAlphaDark = 0.25;
-const double _sheenAlphaLight = 0.35;
-const double _sheenAlphaDark = 0.18;
+// The blur stays modest: past ~24 the page underneath smears into one flat
+// wash instead of frosted glass.
+const double _glassBlur = 22;
+// The visible cause of "there is no glass": a 0.30 tint stacked under a
+// full-height 0.35 white sheen composited to a near-solid white slab, with the
+// blur smeared to nothing at sigma 30. Enough tint to read as its own panel,
+// but far short of hiding the content scrolling underneath.
+const double _glassAlphaLight = 0.24;
+const double _glassAlphaDark = 0.30;
+const double _sheenAlphaLight = 0.12;
+const double _sheenAlphaDark = 0.07;
 const double _edgeAlpha = 0.05;
 
 List<BoxShadow> _dockShadows(ColorScheme colorScheme) {
@@ -967,151 +973,173 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
       0.0,
       (height, label) => math.max(height, label.height),
     );
-    final bar = DecoratedBox(
-      decoration: ShapeDecoration(
-        shape: AppShape.full.copyWith(
-          side: BorderSide(
-            color: colorScheme.onSurface.withValues(alpha: 0.06),
-          ),
-        ),
-        shadows: _dockShadows(colorScheme),
+    final bar = Material(
+      color: colorScheme.surfaceContainer.withValues(
+        alpha: colorScheme.brightness == Brightness.dark
+            ? _glassAlphaDark
+            : _glassAlphaLight,
       ),
-      // Frosted-glass bar: the translucent surface lets the blurred backdrop
-      // show through, and the blurred content is clipped to the pill shape.
-      child: Material(
-        color: colorScheme.surfaceContainer.withValues(
-          alpha: colorScheme.brightness == Brightness.dark
-              ? _glassAlphaDark
-              : _glassAlphaLight,
-        ),
-        shape: AppShape.full,
-        // Raw pointers rather than recognizers: a drag has nothing to win the
-        // arena from, and a tap waiting on one lifts the lens late.
-        child: Listener(
-          behavior: HitTestBehavior.opaque,
-          onPointerDown: _handlePointerDown,
-          onPointerMove: _handlePointerMove,
-          onPointerUp: _handlePointerEnd,
-          onPointerCancel: _handlePointerEnd,
-          child: MouseRegion(
-            onHover: _handleHover,
-            onExit: _handleExit,
-            child: Padding(
-              padding: const EdgeInsets.all(_barPadding),
-              // Above the LayoutBuilder: rebuilding anything under one relays
-              // it out, and that repaint would otherwise reach the whole dock.
-              child: RepaintBoundary(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    final extent =
-                        constraints.maxWidth /
-                        math.max(1, widget.destinations.length);
-                    final room = extent - _labelInset * 2;
-                    final labelScale = widest <= room
-                        ? 1.0
-                        : math.max(room / widest, _minLabelSize / _labelSize);
-                    return Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        if (widget.destinations.isNotEmpty)
-                          AnimatedBuilder(
-                            animation: _motion,
-                            builder: (_, _) => _Lens(
-                              position: _lens.value,
-                              velocity: _lens.velocity,
-                              extent: extent,
-                              height: constraints.maxHeight,
-                              lift: _lift.value,
-                            ),
+      // The rim is drawn separately inside the clip; see the Stack below.
+      shape: AppShape.full,
+      // Raw pointers rather than recognizers: a drag has nothing to win the
+      // arena from, and a tap waiting on one lifts the lens late.
+      child: Listener(
+        behavior: HitTestBehavior.opaque,
+        onPointerDown: _handlePointerDown,
+        onPointerMove: _handlePointerMove,
+        onPointerUp: _handlePointerEnd,
+        onPointerCancel: _handlePointerEnd,
+        child: MouseRegion(
+          onHover: _handleHover,
+          onExit: _handleExit,
+          child: Padding(
+            padding: const EdgeInsets.all(_barPadding),
+            // Above the LayoutBuilder: rebuilding anything under one relays
+            // it out, and that repaint would otherwise reach the whole dock.
+            child: RepaintBoundary(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final extent =
+                      constraints.maxWidth /
+                      math.max(1, widget.destinations.length);
+                  final room = extent - _labelInset * 2;
+                  final labelScale = widest <= room
+                      ? 1.0
+                      : math.max(room / widest, _minLabelSize / _labelSize);
+                  return Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      if (widget.destinations.isNotEmpty)
+                        AnimatedBuilder(
+                          animation: _motion,
+                          builder: (_, _) => _Lens(
+                            position: _lens.value,
+                            velocity: _lens.velocity,
+                            extent: extent,
+                            height: constraints.maxHeight,
+                            lift: _lift.value,
                           ),
-                        if (widget.destinations.isNotEmpty)
-                          AnimatedBuilder(
-                            animation: _hoverMotion,
-                            builder: (_, _) => _HoverHighlight(
-                              position: _hover.value,
-                              extent: extent,
-                              opacity: _hoverShow.value,
-                            ),
-                          ),
-                        Row(
-                          children: [
-                            for (final (index, destination)
-                                in widget.destinations.indexed)
-                              Expanded(
-                                child: _FloatingBarItem(
-                                  destination: destination,
-                                  selected: index == _selectedIndex,
-                                  index: index,
-                                  lens: _lens,
-                                  hoverAt: _hoverAt,
-                                  lift: _lift,
-                                  labelStyle: labelStyle?.copyWith(
-                                    fontSize: _labelSize * labelScale,
-                                  ),
-                                  labelHeight: lineHeight,
-                                  labelOverflows:
-                                      labels[index].width * labelScale > room,
-                                  onActivate: () => widget.onSelected(index),
-                                ),
-                              ),
-                          ],
                         ),
-                      ],
-                    );
-                  },
-                ),
+                      if (widget.destinations.isNotEmpty)
+                        AnimatedBuilder(
+                          animation: _hoverMotion,
+                          builder: (_, _) => _HoverHighlight(
+                            position: _hover.value,
+                            extent: extent,
+                            opacity: _hoverShow.value,
+                          ),
+                        ),
+                      Row(
+                        children: [
+                          for (final (index, destination)
+                              in widget.destinations.indexed)
+                            Expanded(
+                              child: _FloatingBarItem(
+                                destination: destination,
+                                selected: index == _selectedIndex,
+                                index: index,
+                                lens: _lens,
+                                hoverAt: _hoverAt,
+                                lift: _lift,
+                                labelStyle: labelStyle?.copyWith(
+                                  fontSize: _labelSize * labelScale,
+                                ),
+                                labelHeight: lineHeight,
+                                labelOverflows:
+                                    labels[index].width * labelScale > room,
+                                onActivate: () => widget.onSelected(index),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ),
         ),
       ),
     );
-    final glassBar = ClipRRect(
-      borderRadius: BorderRadius.circular(999),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
-        // A top-lit sheen keeps the glass readable even over a flat page
-        // background, where there would otherwise be nothing to blur.
-        child: Stack(
-          children: [
-            bar,
-            Positioned.fill(
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.white.withValues(
-                          alpha: colorScheme.brightness == Brightness.dark
-                              ? _sheenAlphaDark
-                              : _sheenAlphaLight,
+    final glassBar = DecoratedBox(
+      // Outside the clip: a shadow painted inside one is cut away at the pill's
+      // edge, which is why the dock used to read as a flat slab.
+      decoration: ShapeDecoration(
+        shape: AppShape.full,
+        shadows: _dockShadows(colorScheme),
+      ),
+      child: ClipPath(
+        clipper: ShapeBorderClipper(shape: AppShape.full),
+        child: BackdropFilter(
+          // Half the old sigma: 30 smeared the page into one grey wash, so the
+          // dock looked tinted rather than frosted.
+          filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
+          // A top-lit sheen keeps the glass readable over a flat page, where
+          // there would otherwise be nothing to blur. It stops at 60% so the
+          // lower half stays clear.
+          child: Stack(
+            children: [
+              bar,
+              IgnorePointer(
+                child: SizedBox.expand(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        stops: const [0, 0.6],
+                        colors: [
+                          Colors.white.withValues(
+                            alpha: colorScheme.brightness == Brightness.dark
+                                ? _sheenAlphaDark
+                                : _sheenAlphaLight,
+                          ),
+                          Colors.white.withValues(alpha: 0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              IgnorePointer(
+                child: SizedBox.expand(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        stops: const [0, 0.4],
+                        colors: [
+                          colorScheme.onSurface.withValues(alpha: _edgeAlpha),
+                          colorScheme.onSurface.withValues(alpha: 0),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // The edge. In light mode it has to be *darker* than the page —
+              // a white rim over a near-white page is invisible, and that is a
+              // large part of why the bar read as "no glass at all".
+              IgnorePointer(
+                child: SizedBox.expand(
+                  child: DecoratedBox(
+                    decoration: ShapeDecoration(
+                      shape: AppShape.full.copyWith(
+                        side: BorderSide(
+                          color: colorScheme.onSurface.withValues(
+                            alpha: colorScheme.brightness == Brightness.dark
+                                ? 0.22
+                                : 0.12,
+                          ),
                         ),
-                        Colors.white.withValues(alpha: 0),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Positioned.fill(
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                      colors: [
-                        colorScheme.onSurface.withValues(alpha: _edgeAlpha),
-                        colorScheme.onSurface.withValues(alpha: 0),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
