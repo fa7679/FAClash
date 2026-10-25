@@ -1069,7 +1069,7 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
         shadows: _dockShadows(colorScheme),
       ),
       child: ClipPath(
-        clipper: ShapeBorderClipper(shape: AppShape.full),
+        clipper: const ShapeBorderClipper(shape: AppShape.full),
         child: BackdropFilter(
           // Half the old sigma: 30 smeared the page into one grey wash, so the
           // dock looked tinted rather than frosted.
