@@ -92,9 +92,12 @@ BEGIN
             VALUE "CompanyName", "com.follow" "\0"
             VALUE "FileDescription", "FAClash" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "clash" "\0"
+            VALUE "InternalName", "FAClash" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.follow. All rights reserved." "\0"
             VALUE "OriginalFilename", "FAClash.exe" "\0"
+            // Deliberately "clash": path_provider derives the per-user data directory
+            // from CompanyName/ProductName, so renaming this moves
+            // %APPDATA%\com.follow\clash and drops every existing profile.
             VALUE "ProductName", "clash" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END

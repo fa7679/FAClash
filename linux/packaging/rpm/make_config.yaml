@@ -1,4 +1,8 @@
 display_name: FAClash
+# Kept as the id 0.0.x shipped. This packager cannot emit Obsoletes, so a
+# rename would install beside the old package and leave its files behind;
+# only the visible name changes.
+package_name: FlClash
 
 packager: chen08209
 packagerEmail: chen08209@gmail.com
@@ -34,6 +38,7 @@ supported_mime_type:
   - x-scheme-handler/clash
   - x-scheme-handler/clashmeta
   - x-scheme-handler/flclash
+  - x-scheme-handler/faclash
 
 keywords:
   - FAClash

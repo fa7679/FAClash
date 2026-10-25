@@ -68,7 +68,7 @@ sudo dnf install libayatana-appindicator-gtk3     # Fedora
 ## Usage
 
 **Import a profile from a link.** Opening a link in this form imports the subscription into FAClash. The `clashmeta://`
-and `flclash://` schemes work the same way.
+and `flclash://` schemes work the same way (plus `faclash://`).
 
 ```text
 clash://install-config?url=<URL-encoded subscription link>

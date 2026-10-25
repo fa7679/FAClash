@@ -63,7 +63,7 @@ sudo dnf install libayatana-appindicator-gtk3     # Fedora
 
 ## 使用
 
-**通过链接导入配置。** 打开下面格式的链接，即可把订阅导入 FAClash。`clashmeta://` 和 `flclash://` 开头的链接同样可用。
+**通过链接导入配置。** 打开下面格式的链接，即可把订阅导入 FAClash。`clashmeta://`、`faclash://` 和 `flclash://` 开头的链接同样可用。
 
 ```text
 clash://install-config?url=<经过 URL 编码的订阅链接>

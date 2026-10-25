@@ -1,4 +1,7 @@
 display_name: FAClash
+# Kept as the id 0.0.x shipped. Renaming it would make dpkg treat this as a
+# different package: it would not replace the old one, and both would own
+# /opt/FAClash. Only the visible name changes.
 package_name: FlClash
 maintainer:
   name: chen08209
@@ -26,6 +29,7 @@ supported_mime_type:
   - x-scheme-handler/clash
   - x-scheme-handler/clashmeta
   - x-scheme-handler/flclash
+  - x-scheme-handler/faclash
 
 keywords:
   - FAClash

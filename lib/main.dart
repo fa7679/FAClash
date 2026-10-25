@@ -39,7 +39,7 @@ void main(List<String> args) {
         await RustLib.init();
         final version = await system.init();
         final container = await bootstrap.init(version);
-        HttpOverrides.global = FlClashHttpOverrides(container);
+        HttpOverrides.global = FAClashHttpOverrides(container);
         request.attach(container.read);
         runApp(
           UncontrolledProviderScope(

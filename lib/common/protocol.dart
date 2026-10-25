@@ -4,7 +4,7 @@ import 'package:win32_registry/win32_registry.dart';
 
 import 'print.dart';
 
-const protocolSchemes = ['clash', 'clashmeta', 'flclash'];
+const protocolSchemes = ['clash', 'clashmeta', 'flclash', 'faclash'];
 
 class ProtocolRegistrationPlan {
   final String scheme;
@@ -40,9 +40,14 @@ class LinuxProtocolRegistrationPlan {
     required this.applicationsDir,
   });
 
-  String get desktopId => 'flclash-url-handler.desktop';
+  String get desktopId => 'faclash-url-handler.desktop';
 
   String get desktopPath => '$applicationsDir/$desktopId';
+
+  /// The entry an earlier build wrote under the old name. Left behind, it would
+  /// keep claiming these schemes, so registering deletes it.
+  String get legacyDesktopPath =>
+      '$applicationsDir/flclash-url-handler.desktop';
 
   List<String> get mimeTypes =>
       schemes.map((scheme) => 'x-scheme-handler/$scheme').toList();
@@ -120,6 +125,12 @@ class Protocol {
       final file = File(plan.desktopPath);
       await file.parent.create(recursive: true);
       await file.writeAsString(plan.desktopEntry);
+      // Two entries claiming one scheme leave the file manager picking one at
+      // random, so the pre-rebrand entry goes.
+      final legacy = File(plan.legacyDesktopPath);
+      if (await legacy.exists()) {
+        await legacy.delete();
+      }
       final result = await Process.run('xdg-mime', plan.xdgMimeArguments);
       if (result.exitCode != 0) {
         commonPrint.log('xdg-mime default failed: ${result.stderr}'.trim());
