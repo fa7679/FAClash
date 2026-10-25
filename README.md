@@ -115,7 +115,7 @@ Run `dart setup.dart --help` for the remaining options, such as `--targets` to b
 
 ## Support
 
-Website: <https://fa7679.7679520.xyz> (source in [`website/`](website/)).
+Website: <https://fa7679.7679520.xyz> (source in [`docs/`](docs/), also mirrored on GitHub Pages: <https://fa7679.github.io/FAClash/>).
 
 Bugs and feature requests go to [GitHub Issues](https://github.com/fa7679/FAClash/issues). This fork tracks
 [upstream FlClash](https://github.com/chen08209/FlClash) — questions about upstream itself are best asked there.

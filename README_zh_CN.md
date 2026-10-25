@@ -108,7 +108,7 @@ dart setup.dart android   # 或 windows、macos、linux
 
 ## 支持
 
-官网：<https://fa7679.7679520.xyz>（页面源码在 [`website/`](website/)）。
+官网：<https://fa7679.7679520.xyz>（页面源码在 [`docs/`](docs/)，另有 GitHub Pages 镜像：<https://fa7679.github.io/FAClash/>）。
 
 Bug 与功能建议请提交到 [GitHub Issues](https://github.com/fa7679/FAClash/issues)。本仓库跟随
 [上游 FlClash](https://github.com/chen08209/FlClash) 更新，上游本身的问题建议到上游反馈。
