@@ -36,7 +36,8 @@ abstract final class GlassTokens {
         Brightness.light => Colors.white.withValues(alpha: 0.72),
       };
 
-  /// 1px rim around a glass surface; slightly indigo while hovered.
+  /// Hairline (one dp) rim around a glass surface; slightly indigo while
+  /// hovered.
   static Color rim(ColorScheme colorScheme, {bool hovered = false}) {
     if (hovered) {
       return colorScheme.brightness == Brightness.dark
