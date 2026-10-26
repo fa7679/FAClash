@@ -84,11 +84,7 @@ class _HomeShell extends ConsumerWidget {
     final isDashboard = ref.watch(
       shownPageLabelProvider.select((label) => label == PageLabel.dashboard),
     );
-    final glassEnabled = ref.watch(
-      themeSettingProvider.select(
-        (state) => state.glassEnabled && !state.pureBlack,
-      ),
-    );
+    final glassEnabled = glassEnabledOf(ref);
     return Material(
       color: context.colorScheme.surface,
       child: Stack(

@@ -235,11 +235,7 @@ class AppSidebarContainer extends ConsumerWidget {
     final viewMode = navigationState.viewMode;
     final currentIndex = navigationState.currentIndex;
     final blur = ref.watch(windowBlurProvider);
-    final glass = ref.watch(
-      themeSettingProvider.select(
-        (state) => state.glassEnabled && !state.pureBlack,
-      ),
-    );
+    final glass = GlassScope.of(context);
     final colorScheme = context.colorScheme;
     final surfaceContainer = colorScheme.surfaceContainer;
     void onSelected(int index) {

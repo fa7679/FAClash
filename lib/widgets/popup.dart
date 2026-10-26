@@ -4,8 +4,6 @@ import 'dart:ui' show ImageFilter, lerpDouble;
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/glass.dart';
-import 'package:fl_clash/providers/config.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:flutter/foundation.dart' show ValueListenable, listEquals;
 import 'package:flutter/rendering.dart';
@@ -283,30 +281,20 @@ class CommonPopupRoute<T> extends PopupRoute<T> {
               avoid: avoid,
               pin: _pin,
             ),
-            child: Consumer(
-              builder: (context, ref, child) {
-                final glass = ref.watch(
-                  themeSettingProvider.select(
-                    (state) => state.glassEnabled && !state.pureBlack,
-                  ),
-                );
-                return _PopupMorph(
-                  anchor: anchor,
-                  animation: animation,
-                  grow: _grow,
-                  moveX: _moveX,
-                  moveY: _moveY,
-                  content: _content,
-                  unfolded: _unfolded,
-                  sourceColor: sourceColor,
-                  sourceImage: sourceImage,
-                  surfaceColor: glass
-                      ? GlassTokens.fillStrong(colorScheme)
-                      : colorScheme.surfaceContainer,
-                  shadows: _cardShadows(colorScheme),
-                  child: child,
-                );
-              },
+            child: _PopupMorph(
+              anchor: anchor,
+              animation: animation,
+              grow: _grow,
+              moveX: _moveX,
+              moveY: _moveY,
+              content: _content,
+              unfolded: _unfolded,
+              sourceColor: sourceColor,
+              sourceImage: sourceImage,
+              surfaceColor: GlassScope.of(context)
+                  ? GlassTokens.fillStrong(colorScheme)
+                  : colorScheme.surfaceContainer,
+              shadows: _cardShadows(colorScheme),
               child: child,
             ),
           ),

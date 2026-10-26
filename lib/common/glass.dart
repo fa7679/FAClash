@@ -66,7 +66,32 @@ abstract final class GlassTokens {
 ///
 /// When the glass setting is off the surface degrades to an opaque M3
 /// container and every extra layer is dropped.
-class GlassSurface extends ConsumerWidget {
+/// Propagates the glass setting down the tree, including overlay routes
+/// that live below the MaterialApp builder. Absent (bare test harnesses) it
+/// reads as off, so surfaces render exactly like the plain M3 baseline.
+class GlassScope extends InheritedWidget {
+  const GlassScope({super.key, required this.enabled, required super.child});
+
+  final bool enabled;
+
+  static bool of(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<GlassScope>()?.enabled ??
+      false;
+
+  @override
+  bool updateShouldNotify(GlassScope oldWidget) => enabled != oldWidget.enabled;
+}
+
+/// Reads the glass setting from a provider inside a live scope.
+bool glassEnabledOf(WidgetRef ref) {
+  return ref.watch(
+    themeSettingProvider.select(
+      (state) => state.glassEnabled && !state.pureBlack,
+    ),
+  );
+}
+
+class GlassSurface extends StatelessWidget {
   const GlassSurface({
     super.key,
     required this.child,
@@ -94,10 +119,8 @@ class GlassSurface extends ConsumerWidget {
   final Color? rimColor;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final glassEnabled = ref.watch(
-      themeSettingProvider.select((state) => state.glassEnabled),
-    );
+  Widget build(BuildContext context) {
+    final glassEnabled = GlassScope.of(context);
     final colorScheme = Theme.of(context).colorScheme;
     if (!glassEnabled) {
       return DecoratedBox(

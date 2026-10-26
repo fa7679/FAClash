@@ -2,9 +2,7 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/glass.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/icons/icons.dart';
-import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
@@ -90,7 +88,7 @@ class InfoHeader extends StatelessWidget {
 
 const commonCardIconSize = 20.0;
 
-class CommonCard extends ConsumerWidget {
+class CommonCard extends StatelessWidget {
   const CommonCard({
     super.key,
     bool? isSelected,
@@ -291,12 +289,8 @@ class CommonCard extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final glass = ref.watch(
-      themeSettingProvider.select(
-        (state) => state.glassEnabled && !state.pureBlack,
-      ),
-    );
+  Widget build(BuildContext context) {
+    final glass = GlassScope.of(context);
     var childWidget = child;
 
     if (info != null) {
@@ -411,19 +405,15 @@ class SelectIcon extends StatelessWidget {
   }
 }
 
-class SettingsBlock extends ConsumerWidget {
+class SettingsBlock extends StatelessWidget {
   final String title;
   final List<Widget> settings;
 
   const SettingsBlock({super.key, required this.title, required this.settings});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final glass = ref.watch(
-      themeSettingProvider.select(
-        (state) => state.glassEnabled && !state.pureBlack,
-      ),
-    );
+  Widget build(BuildContext context) {
+    final glass = GlassScope.of(context);
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
