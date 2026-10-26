@@ -2,6 +2,44 @@
   "schemaVersion": 2,
   "versions": [
     {
+      "version": "0.0.8",
+      "tag": "v0.0.8",
+      "date": "2026-10-26",
+      "prerelease": false,
+      "groups": [
+        {
+          "type": "feat",
+          "entries": [
+            {
+              "id": "fa7679",
+              "scope": "ui",
+              "text": "Future-glass visual style: translucent surfaces, soft indigo glows and frosted layers across the app, toggleable in theme settings"
+            },
+            {
+              "id": "fa7679",
+              "scope": "web",
+              "text": "The website adopts the same future-glass style with glow gradients and a frosted sticky nav"
+            },
+            {
+              "id": "fa7679",
+              "scope": "theme",
+              "text": "Indigo becomes the default seed color"
+            }
+          ]
+        },
+        {
+          "type": "chore",
+          "entries": [
+            {
+              "id": "fa7679",
+              "scope": "repo",
+              "text": "Remove the unused upstream site pipeline (site/, build_site.sh, render_site.mjs, dead pages workflow)"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "version": "0.0.7",
       "tag": "v0.0.7",
       "date": "2026-10-25",
