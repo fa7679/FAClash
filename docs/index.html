@@ -41,6 +41,7 @@
   --glass-blur:14px;
   --glass-blur-lg:18px;
   --glass-rim:rgba(20,24,40,.10);
+  --nav-glass:rgba(255,255,255,.42);
   --glass-sheen:rgba(255,255,255,.45);
   --glow-1:rgba(99,102,241,.34);
   --glow-2:rgba(139,92,246,.24);
@@ -75,6 +76,7 @@ html[data-theme="dark"]{
   --glass-bg:rgba(15,18,32,.38);
   --glass-bg-strong:rgba(15,18,32,.66);
   --glass-rim:rgba(255,255,255,.18);
+  --nav-glass:rgba(13,16,28,.35);
   --glass-sheen:rgba(255,255,255,.14);
   --glow-1:rgba(99,102,241,.42);
   --glow-2:rgba(139,92,246,.30);
@@ -85,8 +87,8 @@ html[data-theme="dark"]{
 
 /* 不支持 backdrop-filter 时把玻璃提到近不透明，保证可读性 */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  :root{--glass-bg:rgba(255,255,255,.94);--glass-bg-strong:rgba(255,255,255,.96)}
-  html[data-theme="dark"]{--glass-bg:rgba(15,18,32,.96);--glass-bg-strong:rgba(15,18,32,.97)}
+  :root{--glass-bg:rgba(255,255,255,.94);--glass-bg-strong:rgba(255,255,255,.96);--nav-glass:rgba(255,255,255,.85)}
+  html[data-theme="dark"]{--glass-bg:rgba(15,18,32,.96);--glass-bg-strong:rgba(15,18,32,.97);--nav-glass:rgba(13,16,28,.88)}
 }
 /* 深色下的阴影与描边（浅色那套 rgba(20,24,33) 在黑底上会糊掉） */
 html[data-theme="dark"] .flow__vis{box-shadow:0 12px 32px -18px rgba(0,0,0,.65)}
@@ -128,7 +130,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   transition:background .25s ease,border-color .25s ease;
   border-bottom:1px solid transparent;
 }
-.nav.is-stuck{background:var(--glass-bg-strong);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-bottom-color:var(--glass-rim);box-shadow:0 1px 0 rgba(255,255,255,.10) inset,0 12px 32px -18px rgba(0,0,0,.5)}
+.nav.is-stuck{background:var(--nav-glass);backdrop-filter:saturate(200%) blur(20px);-webkit-backdrop-filter:saturate(200%) blur(20px);border-bottom-color:var(--glass-rim);box-shadow:0 1px 0 rgba(255,255,255,.10) inset,0 12px 32px -18px rgba(0,0,0,.5)}
 .nav__in{display:flex;align-items:center;gap:28px;width:min(1180px,calc(100% - 64px));margin-inline:auto}
 .brand{display:flex;align-items:center;gap:9px;font-weight:650;letter-spacing:-.01em}
 .brand svg{display:block}
