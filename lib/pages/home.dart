@@ -1,4 +1,7 @@
+import 'dart:ui' as ui;
+
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/glass.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:fl_clash/manager/app_manager.dart';
@@ -81,78 +84,141 @@ class _HomeShell extends ConsumerWidget {
     final isDashboard = ref.watch(
       shownPageLabelProvider.select((label) => label == PageLabel.dashboard),
     );
+    final glassEnabled = ref.watch(
+      themeSettingProvider.select(
+        (state) => state.glassEnabled && !state.pureBlack,
+      ),
+    );
     return Material(
       color: context.colorScheme.surface,
-      child: Column(
+      child: Stack(
         children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: FocusTraversalGroup(
-                    policy: PageTraversalPolicy(),
-                    child: BottomInsetScope(
-                      inset: isMobile && floating
-                          ? NavigationDock.insetOf(context)
-                          : 0,
-                      child: _BodyPadding(isMobile: isMobile, child: child),
-                    ),
+          // The glass base: two soft radial glows painted once under
+          // everything, so translucent surfaces have something to refract.
+          // Never drawn into the sidebar (that one blurs the real desktop
+          // through the window layer — mixing both would go grey).
+          if (glassEnabled)
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  painter: _GlowPainter(
+                    brightness: context.colorScheme.brightness,
                   ),
                 ),
-                PositionedDirectional(
-                  start: 0,
-                  end: 0,
-                  bottom: 0,
-                  child: AnimatedVisibility.bottomNavigation(
-                    visible: isMobile && floating,
-                    child: _NavigationPadding(
-                      child: NavigationDock(
-                        destinations: [
-                          for (final item in navigationItems)
-                            NavigationDockDestination(
-                              glyph: item.glyph,
-                              label: item.label.label,
-                            ),
-                        ],
-                        selectedIndex: state.currentIndex,
-                        onSelected: (index) {
-                          _handleToPage(navigationItems[index].label, ref);
-                        },
-                        trailing: hasProfile && isDashboard
-                            ? const StartButton()
-                            : null,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          AnimatedVisibility.bottomNavigation(
-            visible: isMobile && !floating,
-            child: _NavigationPadding(
-              child: NavigationBar(
-                destinations: [
-                  for (final (index, item) in navigationItems.indexed)
-                    NavigationDestination(
-                      icon: AnimatedGlyph(
-                        glyph: item.glyph,
-                        filled: index == state.currentIndex,
-                      ),
-                      label: item.label.label,
-                    ),
-                ],
-                selectedIndex: state.currentIndex,
-                onDestinationSelected: (index) {
-                  _handleToPage(navigationItems[index].label, ref);
-                },
               ),
             ),
+          Column(
+            children: [
+              Expanded(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: FocusTraversalGroup(
+                        policy: PageTraversalPolicy(),
+                        child: BottomInsetScope(
+                          inset: isMobile && floating
+                              ? NavigationDock.insetOf(context)
+                              : 0,
+                          child: _BodyPadding(isMobile: isMobile, child: child),
+                        ),
+                      ),
+                    ),
+                    PositionedDirectional(
+                      start: 0,
+                      end: 0,
+                      bottom: 0,
+                      child: AnimatedVisibility.bottomNavigation(
+                        visible: isMobile && floating,
+                        child: _NavigationPadding(
+                          child: NavigationDock(
+                            destinations: [
+                              for (final item in navigationItems)
+                                NavigationDockDestination(
+                                  glyph: item.glyph,
+                                  label: item.label.label,
+                                ),
+                            ],
+                            selectedIndex: state.currentIndex,
+                            onSelected: (index) {
+                              _handleToPage(navigationItems[index].label, ref);
+                            },
+                            trailing: hasProfile && isDashboard
+                                ? const StartButton()
+                                : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              AnimatedVisibility.bottomNavigation(
+                visible: isMobile && !floating,
+                child: _NavigationPadding(
+                  child: NavigationBar(
+                    destinations: [
+                      for (final (index, item) in navigationItems.indexed)
+                        NavigationDestination(
+                          icon: AnimatedGlyph(
+                            glyph: item.glyph,
+                            filled: index == state.currentIndex,
+                          ),
+                          label: item.label.label,
+                        ),
+                    ],
+                    selectedIndex: state.currentIndex,
+                    onDestinationSelected: (index) {
+                      _handleToPage(navigationItems[index].label, ref);
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
   }
+}
+
+/// Two soft radial glows — the left-top primary and the smaller right-bottom
+/// secondary — painted once per resize. Static by design: no repaints while
+/// scrolling, no shader cost beyond the initial fill.
+class _GlowPainter extends CustomPainter {
+  _GlowPainter({required this.brightness});
+
+  final Brightness brightness;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final primary = GlassTokens.glowPrimary(brightness);
+    final secondary = GlassTokens.glowSecondary(brightness);
+    void glow(Offset center, double radius, Color color) {
+      canvas.drawRect(
+        Offset.zero & size,
+        Paint()
+          ..shader = ui.Gradient.radial(center, radius, [
+            color,
+            color.withValues(alpha: 0),
+          ]),
+      );
+    }
+
+    glow(
+      Offset(size.width * 0.15, size.height * 0.10),
+      size.width * 0.55,
+      primary,
+    );
+    glow(
+      Offset(size.width * 0.92, size.height * 0.95),
+      size.width * 0.35,
+      secondary,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_GlowPainter oldDelegate) =>
+      brightness != oldDelegate.brightness;
 }
 
 class _BodyPadding extends StatelessWidget {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/glass.dart';
 import 'package:fl_clash/common/system_dns.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
@@ -234,6 +235,11 @@ class AppSidebarContainer extends ConsumerWidget {
     final viewMode = navigationState.viewMode;
     final currentIndex = navigationState.currentIndex;
     final blur = ref.watch(windowBlurProvider);
+    final glass = ref.watch(
+      themeSettingProvider.select(
+        (state) => state.glassEnabled && !state.pureBlack,
+      ),
+    );
     final colorScheme = context.colorScheme;
     final surfaceContainer = colorScheme.surfaceContainer;
     void onSelected(int index) {
@@ -251,6 +257,8 @@ class AppSidebarContainer extends ConsumerWidget {
             child: _buildBackground(
               color: blur
                   ? surfaceContainer.withValues(alpha: kSidebarBlurOpacity)
+                  : glass
+                  ? GlassTokens.fillStrong(colorScheme)
                   : surfaceContainer,
               edge: colorScheme.outlineVariant,
               child: MediaQuery.removePadding(

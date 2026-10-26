@@ -2,6 +2,9 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/glass.dart';
+import 'package:fl_clash/providers/config.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/physics.dart';
@@ -158,7 +161,7 @@ class SnapSheetRoute<T> extends PopupRoute<T> with SheetCoverRouteMixin<T> {
   }
 }
 
-class _SnapSheet extends StatefulWidget {
+class _SnapSheet extends ConsumerStatefulWidget {
   const _SnapSheet({
     required this.detents,
     required this.transition,
@@ -186,10 +189,10 @@ class _SnapSheet extends StatefulWidget {
   final SnapSheetBuilder builder;
 
   @override
-  State<_SnapSheet> createState() => _SnapSheetState();
+  ConsumerState<_SnapSheet> createState() => _SnapSheetState();
 }
 
-class _SnapSheetState extends State<_SnapSheet>
+class _SnapSheetState extends ConsumerState<_SnapSheet>
     with SingleTickerProviderStateMixin {
   late final _extent = _SnapSheetExtent(
     detents: widget.detents,
@@ -326,7 +329,14 @@ class _SnapSheetState extends State<_SnapSheet>
 
   @override
   Widget build(BuildContext context) {
-    final sheetColor = context.colorScheme.surfaceContainerLow;
+    final glass = ref.watch(
+      themeSettingProvider.select(
+        (state) => state.glassEnabled && !state.pureBlack,
+      ),
+    );
+    final sheetColor = glass
+        ? GlassTokens.fillStrong(context.colorScheme)
+        : context.colorScheme.surfaceContainerLow;
     final theme = Theme.of(context);
     final fitsContent = widget.fitsContent;
     Widget content = widget.builder(context, _scrollController);

@@ -1,7 +1,10 @@
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/glass.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/icons/icons.dart';
+import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 
@@ -87,7 +90,7 @@ class InfoHeader extends StatelessWidget {
 
 const commonCardIconSize = 20.0;
 
-class CommonCard extends StatelessWidget {
+class CommonCard extends ConsumerWidget {
   const CommonCard({
     super.key,
     bool? isSelected,
@@ -128,7 +131,11 @@ class CommonCard extends StatelessWidget {
   final OutlinedBorder? shape;
   final WidgetStatesController? statesController;
 
-  BorderSide _buildBorderSide(BuildContext context, Set<WidgetState> states) {
+  BorderSide _buildBorderSide(
+    BuildContext context,
+    Set<WidgetState> states, {
+    bool glass = false,
+  }) {
     final colorScheme = context.colorScheme;
     if (isError) {
       if (type == CommonCardType.filled) {
@@ -153,6 +160,8 @@ class CommonCard extends StatelessWidget {
     }
     final hoverColor = isSelected
         ? colorScheme.primary.opacity80
+        : glass
+        ? GlassTokens.rim(colorScheme, hovered: true)
         : colorScheme.primary.opacity60;
     if (states.contains(WidgetState.hovered) ||
         states.contains(WidgetState.focused) ||
@@ -162,22 +171,30 @@ class CommonCard extends StatelessWidget {
     return BorderSide(
       color: isSelected
           ? colorScheme.primary
+          : glass
+          ? GlassTokens.rim(colorScheme)
           : colorScheme.surfaceContainerHighest,
     );
   }
 
-  Color? _buildBackgroundColor(BuildContext context) {
+  Color? _buildBackgroundColor(BuildContext context, {bool glass = false}) {
     final colorScheme = context.colorScheme;
     if (type == CommonCardType.filled) {
       if (isSelected) {
         return colorScheme.secondaryContainer.opacity80;
       }
-      return colorScheme.surfaceContainerHigh;
+      return glass
+          ? GlassTokens.fillStrong(colorScheme)
+          : colorScheme.surfaceContainerHigh;
     }
     if (isSelected) {
       return colorScheme.secondaryContainer;
     }
-    return colorScheme.surfaceContainerLow;
+    return glass
+        ? colorScheme.onSurface.withValues(
+            alpha: colorScheme.brightness == Brightness.dark ? 0.05 : 0.50,
+          )
+        : colorScheme.surfaceContainerLow;
   }
 
   Color? _buildForegroundColor(BuildContext context) {
@@ -208,8 +225,9 @@ class CommonCard extends StatelessWidget {
   Widget _buildButton(
     BuildContext context,
     Widget childWidget,
-    FocusNode? focusNode,
-  ) {
+    FocusNode? focusNode, {
+    bool glass = false,
+  }) {
     return switch (type == CommonCardType.filled) {
       true => FilledButton(
         focusNode: focusNode,
@@ -231,10 +249,10 @@ class CommonCard extends StatelessWidget {
               elevation: 0,
             ).copyWith(
               backgroundColor: WidgetStatePropertyAll(
-                _buildBackgroundColor(context),
+                _buildBackgroundColor(context, glass: glass),
               ),
               side: WidgetStateProperty.resolveWith(
-                (states) => _buildBorderSide(context, states),
+                (states) => _buildBorderSide(context, states, glass: glass),
               ),
             ),
         onPressed: inert ? null : onPressed,
@@ -251,7 +269,7 @@ class CommonCard extends StatelessWidget {
               shape: shape ?? AppShape.all(radius ?? AppCorner.md),
               iconSize: commonCardIconSize,
               iconColor: _buildIconColor(context),
-              backgroundColor: _buildBackgroundColor(context),
+              backgroundColor: _buildBackgroundColor(context, glass: glass),
               foregroundColor: _buildForegroundColor(context),
               disabledIconColor: inert ? _buildIconColor(context) : null,
               disabledBackgroundColor: inert
@@ -263,7 +281,7 @@ class CommonCard extends StatelessWidget {
               elevation: 0,
             ).copyWith(
               side: WidgetStateProperty.resolveWith(
-                (states) => _buildBorderSide(context, states),
+                (states) => _buildBorderSide(context, states, glass: glass),
               ),
             ),
         onPressed: inert ? null : onPressed,
@@ -273,7 +291,12 @@ class CommonCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final glass = ref.watch(
+      themeSettingProvider.select(
+        (state) => state.glassEnabled && !state.pureBlack,
+      ),
+    );
     var childWidget = child;
 
     if (info != null) {
@@ -299,9 +322,9 @@ class CommonCard extends StatelessWidget {
     final button = skipTraversal
         ? _SkipTraversalScope(
             builder: (focusNode) =>
-                _buildButton(context, childWidget, focusNode),
+                _buildButton(context, childWidget, focusNode, glass: glass),
           )
-        : _buildButton(context, childWidget, null);
+        : _buildButton(context, childWidget, null, glass: glass);
     final card = !enterActionsOnRight
         ? button
         : Focus(
@@ -388,21 +411,28 @@ class SelectIcon extends StatelessWidget {
   }
 }
 
-class SettingsBlock extends StatelessWidget {
+class SettingsBlock extends ConsumerWidget {
   final String title;
   final List<Widget> settings;
 
   const SettingsBlock({super.key, required this.title, required this.settings});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final glass = ref.watch(
+      themeSettingProvider.select(
+        (state) => state.glassEnabled && !state.pureBlack,
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         children: [
           InfoHeader(info: Info(label: title)),
           Card(
-            color: context.colorScheme.surfaceContainer,
+            color: glass
+                ? GlassTokens.fillStrong(context.colorScheme)
+                : context.colorScheme.surfaceContainer,
             child: Column(children: settings),
           ),
         ],
