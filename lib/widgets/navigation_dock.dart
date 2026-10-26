@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui' show ImageFilter, lerpDouble;
 
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/common/glass.dart';
 import 'package:fl_clash/icons/icons.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -167,19 +168,9 @@ class _Spring extends ChangeNotifier implements ValueListenable<double> {
   }
 }
 
-// A soft, wide drop in the manner of iOS rather than a Material elevation.
-// The blur stays modest: past ~24 the page underneath smears into one flat
-// wash instead of frosted glass.
-const double _glassBlur = 22;
-// The visible cause of "there is no glass": a 0.30 tint stacked under a
-// full-height 0.35 white sheen composited to a near-solid white slab, with the
-// blur smeared to nothing at sigma 30. Enough tint to read as its own panel,
-// but far short of hiding the content scrolling underneath.
-const double _glassAlphaLight = 0.24;
-const double _glassAlphaDark = 0.30;
-const double _sheenAlphaLight = 0.12;
-const double _sheenAlphaDark = 0.07;
-const double _edgeAlpha = 0.05;
+// Glass numbers live in GlassTokens (lib/common/glass.dart) so the dock, the
+// popups and the sheets share one material. The blur stays modest: past ~24
+// the page underneath smears into one flat wash instead of frosted glass.
 
 List<BoxShadow> _dockShadows(ColorScheme colorScheme) {
   final strength = colorScheme.brightness == Brightness.dark ? 3.0 : 1.0;
@@ -975,9 +966,7 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
     );
     final bar = Material(
       color: colorScheme.surfaceContainer.withValues(
-        alpha: colorScheme.brightness == Brightness.dark
-            ? _glassAlphaDark
-            : _glassAlphaLight,
+        alpha: GlassTokens.barTint(colorScheme.brightness),
       ),
       // The rim is drawn separately inside the clip; see the Stack below.
       shape: AppShape.full,
@@ -1061,87 +1050,15 @@ class _FloatingNavigationBarState extends State<FloatingNavigationBar>
         ),
       ),
     );
-    final glassBar = DecoratedBox(
-      // Outside the clip: a shadow painted inside one is cut away at the pill's
-      // edge, which is why the dock used to read as a flat slab.
-      decoration: ShapeDecoration(
-        shape: AppShape.full,
-        shadows: _dockShadows(colorScheme),
+    final glassBar = GlassSurface(
+      shadows: _dockShadows(colorScheme),
+      // The edge. In light mode it has to be *darker* than the page — a white
+      // rim over a near-white page is invisible, and that is a large part of
+      // why the bar used to read as "no glass at all".
+      rimColor: colorScheme.onSurface.withValues(
+        alpha: colorScheme.brightness == Brightness.dark ? 0.22 : 0.12,
       ),
-      child: ClipPath(
-        clipper: const ShapeBorderClipper(shape: AppShape.full),
-        child: BackdropFilter(
-          // Half the old sigma: 30 smeared the page into one grey wash, so the
-          // dock looked tinted rather than frosted.
-          filter: ImageFilter.blur(sigmaX: _glassBlur, sigmaY: _glassBlur),
-          // A top-lit sheen keeps the glass readable over a flat page, where
-          // there would otherwise be nothing to blur. It stops at 60% so the
-          // lower half stays clear.
-          child: Stack(
-            children: [
-              bar,
-              IgnorePointer(
-                child: SizedBox.expand(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        stops: const [0, 0.6],
-                        colors: [
-                          Colors.white.withValues(
-                            alpha: colorScheme.brightness == Brightness.dark
-                                ? _sheenAlphaDark
-                                : _sheenAlphaLight,
-                          ),
-                          Colors.white.withValues(alpha: 0),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              IgnorePointer(
-                child: SizedBox.expand(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        stops: const [0, 0.4],
-                        colors: [
-                          colorScheme.onSurface.withValues(alpha: _edgeAlpha),
-                          colorScheme.onSurface.withValues(alpha: 0),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // The edge. In light mode it has to be *darker* than the page —
-              // a white rim over a near-white page is invisible, and that is a
-              // large part of why the bar read as "no glass at all".
-              IgnorePointer(
-                child: SizedBox.expand(
-                  child: DecoratedBox(
-                    decoration: ShapeDecoration(
-                      shape: AppShape.full.copyWith(
-                        side: BorderSide(
-                          color: colorScheme.onSurface.withValues(
-                            alpha: colorScheme.brightness == Brightness.dark
-                                ? 0.22
-                                : 0.12,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      child: bar,
     );
     return AnimatedBuilder(
       animation: _barMotion,

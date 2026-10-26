@@ -202,6 +202,8 @@
   "pureBlackMode": "Pure black mode",
   "sidebarBlur": "Sidebar blur",
   "sidebarBlurDesc": "Show the blurred desktop behind the window through the sidebar",
+  "glassEffect": "Glass effect",
+  "glassEffectDesc": "Translucent glass surfaces with a soft indigo glow across the interface",
   "keepAliveIntervalDesc": "TCP keep-alive interval",
   "entries": " entries",
   "local": "Local",

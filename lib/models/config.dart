@@ -375,6 +375,7 @@ abstract class ThemeProps with _$ThemeProps {
     @Default(DynamicSchemeVariant.content) DynamicSchemeVariant schemeVariant,
     @Default(false) bool pureBlack,
     @Default(true) bool sidebarBlur,
+    @Default(true) bool glassEnabled,
     @Default(TextScale()) TextScale textScale,
     // `fontFamily` held the names of a removed enum, which old configs may
     // still carry.

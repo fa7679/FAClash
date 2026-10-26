@@ -35,6 +35,7 @@ class ThemeView extends StatelessWidget {
           const _TabAnimationItem(),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           const _SidebarBlurItem(),
+          const _GlassEffectItem(),
           const _FontFamilyItem(),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           const _TextScaleFactorItem(),
@@ -622,6 +623,37 @@ class _SidebarBlurItem extends ConsumerWidget {
           ref
               .read(themeSettingProvider.notifier)
               .update((state) => state.copyWith(sidebarBlur: value));
+        },
+      ),
+    );
+  }
+}
+
+class _GlassEffectItem extends ConsumerWidget {
+  const _GlassEffectItem();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appLocalizations = context.appLocalizations;
+    final glassEnabled = ref.watch(
+      themeSettingProvider.select((state) => state.glassEnabled),
+    );
+    return SliverToBoxAdapter(
+      child: ListItem.toggle(
+        leading: const GlyphIcon(AppGlyphs.blur),
+        horizontalTitleGap: 12,
+        title: Text(
+          appLocalizations.glassEffect,
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+            color: context.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        subtitle: Text(appLocalizations.glassEffectDesc),
+        value: glassEnabled,
+        onChanged: (value) {
+          ref
+              .read(themeSettingProvider.notifier)
+              .update((state) => state.copyWith(glassEnabled: value));
         },
       ),
     );

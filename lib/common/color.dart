@@ -123,6 +123,31 @@ extension ColorSchemeExtension on ColorScheme {
 
   Color get modalScrim => scrim.withValues(alpha: 0.32);
 
+  /// Glass tone: pull the surface family toward the "future glass" base
+  /// (deep space indigo in dark, frosted white in light). Only an HCT/RGB
+  /// tint — never alpha, because M3 components assume opaque surfaces. The
+  /// transform is monotonically increasing in tone, so the surface container
+  /// ordering survives. Pure black keeps its semantics and skips this.
+  ColorScheme toGlassTone(bool isPureBlack) {
+    if (isPureBlack && brightness == Brightness.dark) {
+      return this;
+    }
+    final dark = brightness == Brightness.dark;
+    final target = dark ? const Color(0xFF0E1020) : const Color(0xFFEEF1F6);
+    final t = dark ? 0.35 : 0.30;
+    Color tint(Color color) => Color.lerp(color, target, t)!;
+    return copyWith(
+      surface: tint(surface),
+      surfaceDim: tint(surfaceDim),
+      surfaceBright: tint(surfaceBright),
+      surfaceContainerLowest: tint(surfaceContainerLowest),
+      surfaceContainerLow: tint(surfaceContainerLow),
+      surfaceContainer: tint(surfaceContainer),
+      surfaceContainerHigh: tint(surfaceContainerHigh),
+      surfaceContainerHighest: tint(surfaceContainerHighest),
+    );
+  }
+
   Color get success => Colors.green.harmonizeWith(primary);
 
   Color get warning => Colors.orange.harmonizeWith(primary);

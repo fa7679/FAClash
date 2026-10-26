@@ -202,6 +202,8 @@
   "pureBlackMode": "纯黑模式",
   "sidebarBlur": "侧边栏背景模糊",
   "sidebarBlurDesc": "侧边栏透出窗口后方模糊的桌面",
+  "glassEffect": "玻璃效果",
+  "glassEffectDesc": "界面使用半透明玻璃质感与柔和的靛蓝光晕",
   "keepAliveIntervalDesc": "TCP保持活动间隔",
   "entries": "个条目",
   "local": "本地",

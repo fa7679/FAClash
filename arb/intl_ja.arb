@@ -202,6 +202,8 @@
   "pureBlackMode": "ピュアブラックモード",
   "sidebarBlur": "サイドバーのぼかし",
   "sidebarBlurDesc": "ウィンドウ背後のデスクトップをぼかしてサイドバーに透過します",
+  "glassEffect": "グラス効果",
+  "glassEffectDesc": "半透明のガラス質感と柔らかな藍色の光をインターフェースに適用します",
   "keepAliveIntervalDesc": "TCPキープアライブ間隔",
   "entries": " 件",
   "local": "ローカル",

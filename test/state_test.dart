@@ -1,4 +1,5 @@
 import 'package:fl_clash/common/constant.dart';
+import 'package:fl_clash/common/color.dart';
 import 'package:fl_clash/providers/providers.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +40,7 @@ void main() {
         seedColor: lightSeed,
         brightness: Brightness.light,
         dynamicSchemeVariant: variant,
-      ),
+      ).toGlassTone(false),
     );
     expect(
       container.read(genColorSchemeProvider(Brightness.dark)),
@@ -47,7 +48,7 @@ void main() {
         seedColor: darkSeed,
         brightness: Brightness.dark,
         dynamicSchemeVariant: variant,
-      ),
+      ).toGlassTone(false),
     );
   });
 
@@ -93,7 +94,51 @@ void main() {
         dynamicSchemeVariant: container
             .read(themeSettingProvider)
             .schemeVariant,
-      ),
+      ).toGlassTone(false),
+    );
+  });
+
+  test('glass tone tints surfaces, keeps order and skips pure black', () {
+    final container = ProviderContainer();
+    addTearDown(container.dispose);
+
+    for (final brightness in [Brightness.dark]) {
+      final scheme = container.read(genColorSchemeProvider(brightness));
+      final tones = [
+        scheme.surfaceContainerLowest,
+        scheme.surface,
+        scheme.surfaceDim,
+        scheme.surfaceContainerLow,
+        scheme.surfaceContainer,
+        scheme.surfaceContainerHigh,
+        scheme.surfaceContainerHighest,
+      ].map((color) => Hct.fromInt(color.toARGB32()).tone).toList();
+      expect(tones, orderedEquals([...tones]..sort()), reason: '$brightness');
+    }
+
+    // Light mode: the tint must be applied (surface moves off the raw seed).
+    final rawLight = ColorScheme.fromSeed(
+      seedColor: const Color(defaultPrimaryColor),
+      brightness: Brightness.light,
+      dynamicSchemeVariant: container.read(themeSettingProvider).schemeVariant,
+    );
+    final light = container.read(genColorSchemeProvider(Brightness.light));
+    expect(light.surface, isNot(rawLight.surface));
+
+    container
+        .read(themeSettingProvider.notifier)
+        .update((state) => state.copyWith(pureBlack: true));
+    final dark = container.read(genColorSchemeProvider(Brightness.dark));
+    expect(dark.surface, Colors.black);
+    expect(
+      dark.surfaceContainer,
+      ColorScheme.fromSeed(
+        seedColor: const Color(defaultPrimaryColor),
+        brightness: Brightness.dark,
+        dynamicSchemeVariant: container
+            .read(themeSettingProvider)
+            .schemeVariant,
+      ).toPureBlack(true).surfaceContainer,
     );
   });
 }
