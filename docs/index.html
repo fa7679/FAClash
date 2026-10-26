@@ -130,7 +130,21 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
   transition:background .25s ease,border-color .25s ease;
   border-bottom:1px solid transparent;
 }
-.nav.is-stuck{background:var(--nav-glass);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);border-bottom-color:var(--glass-rim);box-shadow:0 1px 0 rgba(255,255,255,.10) inset,0 12px 32px -18px rgba(0,0,0,.5)}
+.nav.is-stuck{
+  background:rgba(26,31,48,.38);
+  backdrop-filter:saturate(180%) blur(12px);
+  -webkit-backdrop-filter:saturate(180%) blur(12px);
+  border-bottom-color:rgba(255,255,255,.16);
+  box-shadow:0 1px 0 rgba(255,255,255,.14) inset,0 12px 32px -18px rgba(0,0,0,.55);
+  color:#fff;
+}
+.nav.is-stuck .brand span{color:#fff}
+.nav.is-stuck .nav__links{color:rgba(255,255,255,.88)}
+.nav.is-stuck .nav__links a:hover{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+.nav.is-stuck .nav__gh{color:#fff;border-color:rgba(255,255,255,.45)}
+.nav.is-stuck .nav__gh:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7)}
+.nav.is-stuck .nav__theme{color:rgba(255,255,255,.88);border-color:rgba(255,255,255,.45)}
+.nav.is-stuck .nav__theme:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.7);color:#fff}
 .nav__in{display:flex;align-items:center;gap:28px;width:min(1180px,calc(100% - 64px));margin-inline:auto}
 .brand{display:flex;align-items:center;gap:9px;font-weight:650;letter-spacing:-.01em}
 .brand svg{display:block}
