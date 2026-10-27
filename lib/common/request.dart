@@ -95,9 +95,25 @@ class Request {
     return hasUpdate ? release : null;
   }
 
-  /// The release page redirect still answers once the hourly API quota is spent.
+  /// The self-hosted update manifest answers fastest and without the GitHub
+  /// API quota; GitHub stays as the fallback.
   @visibleForTesting
   Future<Map<String, dynamic>> latestRelease() async {
+    try {
+      final response = await dio.get<Map<String, dynamic>>(
+        'https://fa7679.7679520.xyz/update/latest.json',
+        options: Options(responseType: ResponseType.json),
+      );
+      final data = response.data;
+      if (data != null && data['tag_name'] != null) {
+        return data;
+      }
+    } on DioException catch (error) {
+      commonPrint.log(
+        'self-hosted update manifest failed: ${compactError(error)}',
+        logLevel: LogLevel.warning,
+      );
+    }
     try {
       final response = await dio.get<Map<String, dynamic>>(
         'https://api.github.com/repos/$repository/releases/latest',

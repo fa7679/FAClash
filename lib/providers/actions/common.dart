@@ -127,6 +127,41 @@ class CommonAction extends _$CommonAction {
     ];
   }
 
+  /// Picks the installer for the running platform out of the release assets
+  /// and prefers the self-hosted mirror when the manifest offers one.
+  String _downloadUrlFor(Map<String, dynamic> data) {
+    final assets = (data['assets'] as List?) ?? const [];
+    String? urlFor(bool Function(String name) match) {
+      for (final asset in assets) {
+        final map = asset as Map;
+        final name = (map['name'] ?? '') as String;
+        if (match(name)) return map['browser_download_url'] as String?;
+      }
+      return null;
+    }
+
+    final android = Platform.isAndroid;
+    final arm64 =
+        Platform.version.contains('arm64') ||
+        Platform.version.contains('aarch64');
+    final suffix = switch (defaultTargetPlatform) {
+      TargetPlatform.android =>
+        android && arm64 ? 'android-arm64-v8a.apk' : 'android-armeabi-v7a.apk',
+      TargetPlatform.windows => 'windows-amd64-setup.exe',
+      TargetPlatform.macOS => arm64 ? 'macos-arm64.dmg' : 'macos-amd64.dmg',
+      TargetPlatform.linux =>
+        arm64 ? 'linux-arm64.AppImage' : 'linux-amd64.AppImage',
+      _ => null,
+    };
+    if (suffix != null) {
+      final url = urlFor((name) => name.endsWith(suffix));
+      if (url != null) {
+        return url;
+      }
+    }
+    return 'https://github.com/$repository/releases/latest';
+  }
+
   Future<void> checkUpdateResultHandle({
     Map<String, dynamic>? data,
     bool isUser = false,
@@ -144,11 +179,7 @@ class CommonAction extends _$CommonAction {
         cancelText: isUser ? null : currentAppLocalizations.noLongerRemind,
       );
       if (res == true) {
-        unawaited(
-          launchUrl(
-            Uri.parse('https://github.com/$repository/releases/latest'),
-          ),
-        );
+        unawaited(launchUrl(Uri.parse(_downloadUrlFor(data))));
       } else if (!isUser && res == false) {
         ref
             .read(appSettingProvider.notifier)

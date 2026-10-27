@@ -765,7 +765,7 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
       </div>
 
       <div class="stage__cta">
-        <a class="btn" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">
+        <a class="btn" id="dlHero" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">
           下载 FAClash
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.5v8M4.6 7.4 8 10.8l3.4-3.4M3 13.2h10"/></svg>
         </a>
@@ -897,28 +897,28 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
             <td class="plat__arch" data-l="架构">x64 · ARM64</td>
             <td class="plat__pkg" data-l="安装包">安装版 <code>.exe</code> 或便携版 <code>.zip</code><br><span class="plat__req">骁龙等 ARM 架构笔记本选 ARM64</span></td>
             <td class="plat__hide plat__req">Windows 10 及以上</td>
-            <td class="plat__act"><a class="plat__dl" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
+            <td class="plat__act"><a class="plat__dl" data-asset="windows-amd64-setup.exe" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
           </tr>
           <tr>
             <td><div class="plat__os">macOS</div></td>
             <td class="plat__arch" data-l="架构">Apple Silicon · Intel</td>
             <td class="plat__pkg" data-l="安装包"><code>.dmg</code> 两种架构分开打包</td>
             <td class="plat__hide plat__req">macOS 12 及以上</td>
-            <td class="plat__act"><a class="plat__dl" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
+            <td class="plat__act"><a class="plat__dl" data-asset="macos-arm64.dmg" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
           </tr>
           <tr>
             <td><div class="plat__os">Android</div></td>
             <td class="plat__arch" data-l="架构">arm64-v8a<br>armeabi-v7a · x86_64</td>
             <td class="plat__pkg" data-l="安装包"><code>.apk</code> 三种 ABI<br><span class="plat__req">绝大多数手机选 arm64-v8a</span></td>
             <td class="plat__hide plat__req">含 Android TV</td>
-            <td class="plat__act"><a class="plat__dl" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
+            <td class="plat__act"><a class="plat__dl" data-asset="android-arm64-v8a.apk" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
           </tr>
           <tr>
             <td><div class="plat__os">Linux</div></td>
             <td class="plat__arch" data-l="架构">x64 · ARM64</td>
             <td class="plat__pkg" data-l="安装包"><code>.deb</code> · <code>.rpm</code> · <code>AppImage</code></td>
             <td class="plat__hide plat__req">Debian / Fedora 系</td>
-            <td class="plat__act"><a class="plat__dl" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
+            <td class="plat__act"><a class="plat__dl" data-asset="linux-amd64.AppImage" href="https://github.com/fa7679/FAClash/releases/latest" target="_blank" rel="noopener">下载 →</a></td>
           </tr>
         </tbody>
       </table>
@@ -1161,6 +1161,7 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
     const versions = (data && data.versions) || [];
     if (!versions.length) return;
     const latest = versions[0];
+    wireNasDownloads(latest.version);
     const relVer = document.getElementById('relVer');
     if (relVer) relVer.textContent = 'v' + latest.version;
     const badge = document.getElementById('relBadge');
@@ -1188,15 +1189,27 @@ body,.nav,.win,.win__bar,.win__side,.sec--white,.flow__vis,.live__col,.plat__not
     }).join('');
   }
 
+  /* 自托管（NAS）时安装包走本机 /update/ 直链，GitHub 镜像保持跳 Release */
+  const onNas = location.hostname !== 'github.io' && !location.hostname.endsWith('github.com');
+  function wireNasDownloads(version) {
+    if (!onNas || !version) return;
+    document.querySelectorAll('.plat__dl[data-asset]').forEach((a) => {
+      a.href = 'update/FAClash-' + version + '-' + a.dataset.asset;
+      a.removeAttribute('target');
+    });
+    const hero = document.getElementById('dlHero');
+    if (hero) { hero.removeAttribute('target'); hero.setAttribute('href', '#download'); }
+  }
+
   (async () => {
     let data = null;
     try {
-      const r = await fetch('https://cdn.jsdelivr.net/gh/fa7679/FAClash@main/changelog.json', { cache: 'no-store' });
+      const r = await fetch('changelog.json', { cache: 'no-store' });
       if (r.ok) data = await r.json();
     } catch (e) {}
     if (!data) {
       try {
-        const r = await fetch('changelog.json');
+        const r = await fetch('https://cdn.jsdelivr.net/gh/fa7679/FAClash@main/changelog.json', { cache: 'no-store' });
         if (r.ok) data = await r.json();
       } catch (e) {}
     }
